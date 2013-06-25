@@ -182,4 +182,6 @@ extern char **lesson_list_filenames;
 extern int* lesson_list_goldstars;
 extern int num_lessons;
 
+SDL_Thread *tts_announcer_thread;
+
 #endif

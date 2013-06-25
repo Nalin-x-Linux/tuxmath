@@ -57,7 +57,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.  */
 #include "titlescreen.h"
 #include "options.h"
 #include "draw_utils.h"
-
+#include "t4k_common.h"
 
 #define CITY_EXPL_START (3 * 5)  /* Must be mult. of 5 (number of expl frames) */
 #define ANIM_FRAME_START (4 * 2) /* Must be mult. of 2 (number of tux frames) */
@@ -248,7 +248,40 @@ void print_current_quests(void);
 static void print_exit_conditions(void);
 static void print_status(void);
 
+int tts_announcer(void *unused)
+{
+	int i,ans;
+	float y_axis;	
+	
+	int pitch;
+	int rate;
+	
+	while(1)
+	{		
+		y_axis = 0;
+		ans = -1;		
+		for (i = 0; i < MAX_MAX_COMETS; i++){
+			if (comets[i].alive && (comets[i].y > y_axis)){
+				ans = i;	
+				y_axis = comets[i].y;
+			}
+		}
+		//if ans not equll to -1  announce the answer
+		if (ans != -1)
+		{
+			rate = (int)(comets[ans].y*100)/(screen->h - igloo_vertical_offset - images[IMG_IGLOO_INTACT]->h);
+			if (rate < 30)
+				rate = 30;
+			else if (rate > 80)
+				rate = 80;
 
+			fprintf(stderr,"\nRate : %d ",rate );
+			T4K_Tts_say(rate,DEFAULT_VALUE,INTERRUPT,"%s",comets[ans].flashcard.formula_string);
+		}
+		T4K_Tts_wait();
+		SDL_Delay(100);
+	}
+}
 
 
 
@@ -257,6 +290,8 @@ static void print_status(void);
 
 int comets_game(MC_MathGame* mgame)
 {
+	extern SDL_Thread *tts_announcer_thread;
+
     DEBUGMSG(debug_game, "Entering game():\n");
 
     srand(time(0));
@@ -292,6 +327,9 @@ int comets_game(MC_MathGame* mgame)
         comets_cleanup();
         return GAME_OVER_OTHER;
     }
+    
+    //Calling tts_announcer
+    tts_announcer_thread = SDL_CreateThread(tts_announcer,NULL);
 
     DEBUGMSG(debug_game, "About to enter main game loop.\n");
 
