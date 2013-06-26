@@ -250,36 +250,48 @@ static void print_status(void);
 
 int tts_announcer(void *unused)
 {
-	int i,ans;
+	int i,j;
+	
+	int order[15],iter;
 	float y_axis;	
 	
 	int pitch;
 	int rate;
 	
 	while(1)
-	{		
-		y_axis = 0;
-		ans = -1;		
+	{
+		iter = 0;				
+		//Getting all alive comets to
 		for (i = 0; i < MAX_MAX_COMETS; i++){
-			if (comets[i].alive && (comets[i].y > y_axis)){
-				ans = i;	
-				y_axis = comets[i].y;
+			if (comets[i].alive){
+				order[iter] = i;
+				iter++;
 			}
 		}
-		//if ans not equll to -1  announce the answer
-		if (ans != -1)
-		{
-			rate = (int)(comets[ans].y*100)/(screen->h - igloo_vertical_offset - images[IMG_IGLOO_INTACT]->h);
-			if (rate < 30)
-				rate = 30;
-			else if (rate > 80)
-				rate = 80;
-
-			fprintf(stderr,"\nRate : %d ",rate );
-			T4K_Tts_say(rate,DEFAULT_VALUE,INTERRUPT,"%s",comets[ans].flashcard.formula_string);
-		}
-		T4K_Tts_wait();
-		SDL_Delay(100);
+		
+		if (iter != 0){
+			//Odering the fishes with respect to y axis
+			for (i = 0; i < iter; i++){
+				for(j = 0; j < iter; j++){
+					if (comets[order[j]].y < comets[order[j+1]].y){
+						y_axis = order[j+1];
+						order[j+1] = order[j];
+						order[j] = y_axis;
+					}
+				}
+			}
+			for (i = 0; i < iter ; i++)
+			{
+				rate = (int)(comets[order[i]].y*100)/(screen->h - igloo_vertical_offset - images[IMG_IGLOO_INTACT]->h);
+				if (rate < 30)
+					rate = 30;
+				else if (rate > 70)
+					rate = 70;
+				T4K_Tts_say(rate,rate,INTERRUPT,"%s",comets[order[i]].flashcard.formula_string);
+				T4K_Tts_wait();
+				SDL_Delay(100);
+			}		
+		}	
 	}
 }
 
