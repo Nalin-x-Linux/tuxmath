@@ -288,11 +288,28 @@ int tts_announcer(void *unused)
 				else if (rate > 70)
 					rate = 70;
 				T4K_Tts_say(rate,rate,INTERRUPT,"%s",comets[order[i]].flashcard.formula_string);
+				SDL_Delay(20);
 				T4K_Tts_wait();
-				SDL_Delay(100);
 			}		
 		}	
 	}
+}
+void start_tts_announcer_thread(){
+	extern SDL_Thread *tts_announcer_thread;
+	tts_announcer_thread = SDL_CreateThread(tts_announcer,NULL);
+	T4K_Tts_stop();
+}
+
+void stop_tts_announcer_thread(){
+	extern SDL_Thread *tts_announcer_thread;
+	if (tts_announcer_thread)
+    {
+		T4K_Tts_stop();
+		SDL_KillThread(tts_announcer_thread);
+		tts_announcer_thread = NULL;
+    }	
+	
+	SDL_KillThread(tts_announcer_thread);
 }
 
 
@@ -302,7 +319,6 @@ int tts_announcer(void *unused)
 
 int comets_game(MC_MathGame* mgame)
 {
-	extern SDL_Thread *tts_announcer_thread;
 
     DEBUGMSG(debug_game, "Entering game():\n");
 
@@ -341,7 +357,7 @@ int comets_game(MC_MathGame* mgame)
     }
     
     //Calling tts_announcer
-    tts_announcer_thread = SDL_CreateThread(tts_announcer,NULL);
+    start_tts_announcer_thread();
 
     DEBUGMSG(debug_game, "About to enter main game loop.\n");
 
@@ -393,6 +409,8 @@ int comets_game(MC_MathGame* mgame)
         /* If we're in "PAUSE" mode, pause! */
         if (paused)
         {
+			stop_tts_announcer_thread();
+            fprintf(stderr,"\nPaused");
             pause_game();
             paused = 0;
         }
@@ -1231,6 +1249,8 @@ void comets_handle_answer(void)
             {
                 MC_AnsweredCorrectly(curr_game, comets[index_comets].flashcard.question_id, t);
             }
+            
+            
             /* Destroy comet: */
             comets[index_comets].expl = 0;
             comets[index_comets].zapped = 1;
@@ -2945,6 +2965,7 @@ void comets_key_event(SDLKey key, SDLMod mod)
     if (key == SDLK_ESCAPE)
     {
         /* Escape key - quit! */
+        stop_tts_announcer_thread();
         user_quit_received = GAME_OVER_ESCAPE;
     }
     DEBUGCODE(debug_game)
