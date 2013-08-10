@@ -410,7 +410,8 @@ int comets_game(MC_MathGame* mgame)
         if (paused)
         {
 			stop_tts_announcer_thread();
-			T4K_Tts_say(DEFAULT_VALUE,DEFAULT_VALUE,INTERRUPT,"Game paused. Press escape or p to continue");
+			if(Opts_GetGlobalOp("USE_TTS"))
+				T4K_Tts_say(DEFAULT_VALUE,DEFAULT_VALUE,INTERRUPT,"Game paused. Press escape or p to continue");
             pause_game();
             paused = 0;
             start_tts_announcer_thread();

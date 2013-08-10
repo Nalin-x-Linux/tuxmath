@@ -223,7 +223,8 @@ void briefPlayer(int stage)
     {
 		strcat(tts_text,briefings[stage][i]);
 	}
-    T4K_Tts_say(DEFAULT_VALUE,DEFAULT_VALUE,INTERRUPT,"%s",tts_text);
+    if(Opts_GetGlobalOp("USE_TTS"))
+		T4K_Tts_say(DEFAULT_VALUE,DEFAULT_VALUE,INTERRUPT,"%s",tts_text);
 
     //background is dark blue with a black text area
     SDL_FillRect(screen, NULL, SDL_MapRGB(screen->format, 0, 0, 32));

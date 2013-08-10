@@ -546,7 +546,7 @@ void ShowMessageWrap( int font_size, const char* str )
         nline = T4K_LineWrap( str, strings, 35, MAX_LINES, MAX_LINEWIDTH );
 
 	/* Announcing the message */
-	//if (settings.tts)
+	if(Opts_GetGlobalOp("USE_TTS"))
 		T4K_Tts_say(DEFAULT_VALUE,DEFAULT_VALUE,INTERRUPT,"%s",str);
 	
     while(inprogress)
