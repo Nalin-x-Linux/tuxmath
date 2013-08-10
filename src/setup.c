@@ -434,6 +434,8 @@ void handle_command_args(int argc, char* argv[])
                     "--resolution WxH - window resolution (windowed mode only)\n"
                     "--keypad         - to enable the on-sceen numeric keypad\n"
                     "--demo           - to run the program as a cycling demonstration\n"
+                    "--tts 			  - Enable in game accessibility\n"
+                    "--notts 		  - Disable in game accessibility\n"
                     "--speed S        - set initial speed of the game\n"
                     "                   (S may be fractional, default is 1.0)\n"
                     "--allownegatives - to allow answers to be less than zero\n"
@@ -553,6 +555,20 @@ void handle_command_args(int argc, char* argv[])
         {
             Opts_SetGlobalOpt(FULLSCREEN, 0);
         }
+
+        else if (strcmp(argv[i], "--tts") == 0 ||
+                strcmp(argv[i], "-t") == 0)
+        {
+            Opts_SetGlobalOpt(USE_TTS, 1);
+        }
+
+        else if (strcmp(argv[i], "--notts") == 0 ||
+                strcmp(argv[i], "-nt") == 0)
+        {
+            Opts_SetGlobalOpt(USE_TTS, 0);
+        }
+        
+
         else if (strcmp(argv[i], "--nosound") == 0 ||
                 strcmp(argv[i], "-s") == 0 ||
                 strcmp(argv[i], "--quiet") == 0 ||
