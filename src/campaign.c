@@ -191,7 +191,7 @@ void briefPlayer(int stage)
             {""}
         },
     };
-
+    char tts_text[1000];int i;
 
     char* sprites[] = {
         "sprites/tux_helmet_yellow.svg",
@@ -218,6 +218,13 @@ void briefPlayer(int stage)
         textarea.w = screen->w - icon->w;
         textarea.h = screen->h - icon->h;
     }
+    
+    tts_text[0] = '\0';
+    for(i = 0;i < MAX_LINES;i++)
+    {
+		strcat(tts_text,briefings[stage][i]);
+	}
+    T4K_Tts_say(DEFAULT_VALUE,DEFAULT_VALUE,INTERRUPT,"%s",tts_text);
 
     //background is dark blue with a black text area
     SDL_FillRect(screen, NULL, SDL_MapRGB(screen->format, 0, 0, 32));
