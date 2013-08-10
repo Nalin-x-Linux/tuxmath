@@ -248,6 +248,9 @@ void print_current_quests(void);
 static void print_exit_conditions(void);
 static void print_status(void);
 
+int tts_announcer_switch;
+
+
 int tts_announcer(void *unused)
 {
 	int i,j;
@@ -257,9 +260,13 @@ int tts_announcer(void *unused)
 	
 	int pitch;
 	int rate;
+	tts_announcer_switch = 1;
 	
 	while(1)
 	{
+		if (tts_announcer_switch == 0)
+			goto end;
+		
 		iter = 0;				
 		//Getting all alive comets to
 		for (i = 0; i < MAX_MAX_COMETS; i++){
@@ -282,6 +289,9 @@ int tts_announcer(void *unused)
 			}
 			for (i = 0; i < iter ; i++)
 			{
+				if (tts_announcer_switch == 0)
+					goto end;
+				
 				rate = (int)(comets[order[i]].y*100)/(screen->h - igloo_vertical_offset - images[IMG_IGLOO_INTACT]->h);
 				if (rate < 30)
 					rate = 30;
@@ -293,23 +303,17 @@ int tts_announcer(void *unused)
 			}		
 		}	
 	}
+	end:
+	return 0;
 }
 void start_tts_announcer_thread(){
 	extern SDL_Thread *tts_announcer_thread;
 	tts_announcer_thread = SDL_CreateThread(tts_announcer,NULL);
-	T4K_Tts_stop();
 }
 
 void stop_tts_announcer_thread(){
-	extern SDL_Thread *tts_announcer_thread;
-	if (tts_announcer_thread)
-    {
-		T4K_Tts_stop();
-		SDL_KillThread(tts_announcer_thread);
-		tts_announcer_thread = NULL;
-    }	
-	
-	SDL_KillThread(tts_announcer_thread);
+	tts_announcer_switch = 0;
+	T4K_Tts_stop();
 }
 
 
