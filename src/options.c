@@ -74,6 +74,7 @@ const char* const OPTION_TEXT[NUM_GLOBAL_OPTS+1] = {
     "FULLSCREEN",
     "USE_KEYPAD",
     "USE_IGLOOS",
+    "USE_TTS",
     "END_OF_OPTS"
 };
 
@@ -84,6 +85,7 @@ const int DEFAULT_GLOBAL_OPTS[NUM_GLOBAL_OPTS] = {
     1,
     1,
     0,
+    1,
     1
 };
 
