@@ -38,7 +38,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.  */
 #include "setup.h"
 #include "credits.h"
 
-char credit_tts_text[MAX_LINES*MAX_LINEWIDTH]; 
 const char credit_text[MAX_LINES][MAX_LINEWIDTH] = {
     {"-"N_("TUX, OF MATH COMMAND")},  /* '-' at beginning makes highlighted: */
     {N_("COPYRIGHT 2001-2011")},
@@ -391,8 +390,8 @@ int credits(void)
 {
     int i,done, quit, scroll;
     SDL_Rect subscreen, dest;
-    
-    
+	
+	char credit_tts_text[MAX_LINES*MAX_LINEWIDTH]; 
     credit_tts_text[0] = '\0';
 	for (i = 0; i< MAX_LINES;i++)
 	{

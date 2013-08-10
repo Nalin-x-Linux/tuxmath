@@ -191,8 +191,6 @@ void briefPlayer(int stage)
             {""}
         },
     };
-    char tts_text[1000];int i;
-
     char* sprites[] = {
         "sprites/tux_helmet_yellow.svg",
         "sprites/tux_helmet_green.svg",
@@ -219,6 +217,7 @@ void briefPlayer(int stage)
         textarea.h = screen->h - icon->h;
     }
     
+    char tts_text[1000];int i;
     tts_text[0] = '\0';
     for(i = 0;i < MAX_LINES;i++)
     {
