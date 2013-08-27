@@ -375,6 +375,8 @@ void NameEntry(char* pl_name, const char* s1, const char* s2, const char* s3)
         }
 
     }
+    
+    T4K_Tts_say(DEFAULT_VALUE,DEFAULT_VALUE,INTERRUPT,"%s %s %s",_(s1),_(s2),_(s3));
 
     /* and update: */
     SDL_UpdateRect(screen, 0, 0, 0, 0);
@@ -434,6 +436,7 @@ void NameEntry(char* pl_name, const char* s1, const char* s2, const char* s3)
                                     {
                                         wchar_buf[(int)wcslen(wchar_buf)] = event.key.keysym.unicode;
                                         redraw = 1;
+                                        T4K_Tts_say(DEFAULT_VALUE,DEFAULT_VALUE,INTERRUPT,"%C",event.key.keysym.unicode);
                                     }
                                 }
                         }  /* end  'switch (event.key.keysym.sym)'  */
