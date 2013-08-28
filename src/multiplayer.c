@@ -228,6 +228,8 @@ void showWinners(int* winners, int num)
     {
         snprintf(strchr(text, '\0'), sectionlength, _("Then %s\n"), pnames[winners[i]]);
     }
+    
+    T4K_Tts_say(DEFAULT_VALUE,DEFAULT_VALUE,INTERRUPT,"%s. press space or escape to return to main menu.",text);
 
     DEBUGMSG(debug_multiplayer, "%s Win text: %s\n", pnames[winners[0]], text);
 
