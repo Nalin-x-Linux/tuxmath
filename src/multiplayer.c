@@ -128,6 +128,7 @@ void mp_run_multiplayer()
             for (currentplayer = 0; currentplayer < params[PLAYERS]; ++currentplayer)
             {
                 game_set_start_message(pnames[currentplayer], _("Go!"), NULL, NULL);
+                T4K_Tts_say(DEFAULT_VALUE,DEFAULT_VALUE,INTERRUPT,"%s %s ",pnames[currentplayer],_("Go!"));
                 result = comets_game(local_game);
                 //pscores[currentplayer] += Opts_LastScore(); //add this player's score
                 if (result == GAME_OVER_WON)
