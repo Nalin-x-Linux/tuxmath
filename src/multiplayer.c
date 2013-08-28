@@ -90,6 +90,7 @@ void mp_run_multiplayer()
         {
             //TODO maybe gradually increase difficulty
             game_set_start_message(pnames[currentplayer], "Go!", "", "");
+            T4K_Tts_say(DEFAULT_VALUE,DEFAULT_VALUE,INTERRUPT,"%s %s ",pnames[currentplayer],_("Go!"));
             result = comets_game(local_game);
 
             if (result == GAME_OVER_LOST || result == GAME_OVER_ESCAPE)
