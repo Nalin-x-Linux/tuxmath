@@ -70,7 +70,9 @@ void DisplayHighScores(int level)
 
     const int title_font_size = 32;
     const int player_font_size = 14;
-
+    
+    char tts_temp[2000];
+    
     while (!finished)
     {
         /* Check for user events: */
@@ -173,6 +175,9 @@ void DisplayHighScores(int level)
                 SDL_Rect text_rect, button_rect;
 
                 srfc = T4K_BlackOutline(_("Hall Of Fame"), title_font_size, &yellow);
+                strcpy(tts_temp,_("Hall Of Fame"));
+                strcat(tts_temp,"  ");
+                
                 if (srfc)
                 {
                     button_rect.x = text_rect.x = (screen->w)/2 - (srfc->w)/2 + 50;
@@ -193,27 +198,35 @@ void DisplayHighScores(int level)
                 {
                     case CADET_HIGH_SCORE:
                         srfc = T4K_BlackOutline(_("Space Cadet"), title_font_size, &white);
+                        strcat(tts_temp,_("Space Cadet"));
                         break;
                     case SCOUT_HIGH_SCORE:
                         srfc = T4K_BlackOutline(_("Scout"), title_font_size, &white);
+                        strcat(tts_temp,_("Scout"));
                         break;
                     case RANGER_HIGH_SCORE:
                         srfc = T4K_BlackOutline(_("Ranger"), title_font_size, &white);
+                        strcat(tts_temp,_("Ranger"));
                         break;
                     case ACE_HIGH_SCORE:
                         srfc = T4K_BlackOutline(_("Ace"), title_font_size, &white);
+                        strcat(tts_temp,_("Ace"));
                         break;
                     case COMMANDO_HIGH_SCORE:
                         srfc = T4K_BlackOutline(_("Commando"), title_font_size, &white);
+                        strcat(tts_temp,_("Commando"));
                         break;
                     case FACTORS_HIGH_SCORE:
                         srfc = T4K_BlackOutline(_("Factors"), title_font_size, &white);
+                        strcat(tts_temp,_("Factors"));
                         break;
                     case FRACTIONS_HIGH_SCORE:
                         srfc = T4K_BlackOutline(_("Fractions"), title_font_size, &white);
+                        strcat(tts_temp,_("Fractions"));
                         break;
                     default:
                         srfc = T4K_BlackOutline(_("Space Cadet"), title_font_size, &white);
+                        strcat(tts_temp,_("Space Cadet"));
                 }
 
                 if (srfc)
@@ -229,8 +242,8 @@ void DisplayHighScores(int level)
                     score_table_y = text_rect.y + text_rect.h;
                 }
             }
-
-
+            
+            strcat(tts_temp,". Score sheet with place,score and name ");
             /* Generate and draw desired table: */
 
             for (i = 0; i < HIGH_SCORES_SAVED; i++)
@@ -241,6 +254,12 @@ void DisplayHighScores(int level)
                         i + 1,                  /* Add one to get common-language place number */
                         HS_Score(diff_level, i),
                         HS_Name(diff_level, i));
+                
+                if (HS_Score(diff_level, i) != 0)
+                {
+					strcat(tts_temp,". On place ");
+					strcat(tts_temp,score_strings[i]);
+				}
 
                 /* Clear out old surfaces and update: */
                 if (score_surfs[i])               /* this should not happen! */
@@ -267,6 +286,10 @@ void DisplayHighScores(int level)
                 SDL_FreeSurface(score_surfs[i]);
                 score_surfs[i] = NULL;
             }
+            strcat(tts_temp,". Press space or escape to return to main menu.");
+            T4K_Tts_say(DEFAULT_VALUE,DEFAULT_VALUE,INTERRUPT,"%s",tts_temp);
+
+            
             /* Update screen: */
             SDL_UpdateRect(screen, 0, 0, 0, 0);
 
