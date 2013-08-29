@@ -256,7 +256,13 @@ int tts_announcer(void *unused)
 	int i,j;
 	
 	int order[15],iter;
-	float y_axis;	
+	float y_axis;
+	
+	//Qustion remaker
+	wchar_t qustion[2000];	
+	wchar_t *ptr;
+	wchar_t *temp;
+	wchar_t qustion_in_words[2000];
 	
 	int pitch;
 	int rate;
@@ -297,7 +303,34 @@ int tts_announcer(void *unused)
 					rate = 30;
 				else if (rate > 70)
 					rate = 70;
-				T4K_Tts_say(rate,rate,INTERRUPT,"%s",comets[order[i]].flashcard.formula_string);
+				
+				
+				
+				mbstowcs(qustion,comets[order[i]].flashcard.formula_string,2000);				
+				temp = wcstok(qustion,L" ",&ptr);
+				qustion_in_words[0] = L'\0';
+				while(temp != NULL)
+				{
+					if (wcscmp(temp,L"+") == 0)
+						wcscat(qustion_in_words,_(L"plus "));
+					else if (wcscmp(temp,L"-") == 0)
+						wcscat(qustion_in_words,_(L"minus "));
+					else if (wcscmp(temp,L"/") == 0)
+						wcscat(qustion_in_words,_(L"divided by "));
+					else if (wcscmp(temp,L"*") == 0)
+						wcscat(qustion_in_words,_(L"Times "));
+					else
+					{
+						wcscat(qustion_in_words,temp);
+						wcscat(qustion_in_words,L" ");
+					}	
+					temp = wcstok(NULL,L" ",&ptr);
+				}
+				
+				
+				
+				
+				T4K_Tts_say(rate,rate,INTERRUPT,"%S",qustion_in_words);
 				SDL_Delay(20);
 				T4K_Tts_wait();
 			}		
