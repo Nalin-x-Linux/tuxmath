@@ -2145,6 +2145,8 @@ void comets_handle_game_over(int game_status)
             dest_message.y = (screen->h - images[IMG_GAMEOVER_WON]->h) / 2;
             dest_message.w = images[IMG_GAMEOVER_WON]->w;
             dest_message.h = images[IMG_GAMEOVER_WON]->h;
+            
+            stop_tts_announcer_thread();
             T4K_Tts_say(DEFAULT_VALUE,DEFAULT_VALUE,INTERRUPT,"Game winned");
             do
             {
@@ -2362,6 +2364,8 @@ void comets_handle_game_over(int game_status)
         case GAME_OVER_LOST:
         case GAME_OVER_OTHER:
         {
+			stop_tts_announcer_thread();
+            T4K_Tts_say(DEFAULT_VALUE,DEFAULT_VALUE,INTERRUPT,"Game Over!");
             int looping = 1;
 
             /* set up GAMEOVER message: */
