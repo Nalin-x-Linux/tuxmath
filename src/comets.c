@@ -218,6 +218,12 @@ static void help_add_comet(const char* formula_str, const char* ans_str);
 static int help_renderframe_exit(void);
 static void comets_recalc_positions(int xres, int yres);
 
+//Accessibility functions
+int tts_announcer_switch;
+int tts_announcer(void *unused);
+void stop_tts_announcer_thread();
+void start_tts_announcer_thread();
+
 int powerup_initialize(void);
 PowerUp_Type powerup_gettype(void);
 int powerup_add_comet(void);
@@ -247,108 +253,6 @@ void print_current_quests(void);
 
 static void print_exit_conditions(void);
 static void print_status(void);
-
-int tts_announcer_switch;
-
-
-int tts_announcer(void *unused)
-{
-	int i,j;
-	
-	int order[15],iter;
-	float y_axis;
-	
-	//Qustion remaker
-	wchar_t qustion[2000];	
-	wchar_t *ptr;
-	wchar_t *temp;
-	wchar_t qustion_in_words[2000];
-	
-	int pitch;
-	int rate;
-	tts_announcer_switch = 1;
-	
-	while(1)
-	{
-		if (tts_announcer_switch == 0)
-			goto end;
-		
-		iter = 0;				
-		//Getting all alive comets to
-		for (i = 0; i < MAX_MAX_COMETS; i++){
-			if (comets[i].alive){
-				order[iter] = i;
-				iter++;
-			}
-		}
-		
-		if (iter != 0){
-			//Odering the fishes with respect to y axis
-			for (i = 0; i < iter; i++){
-				for(j = 0; j < iter; j++){
-					if (comets[order[j]].y < comets[order[j+1]].y){
-						y_axis = order[j+1];
-						order[j+1] = order[j];
-						order[j] = y_axis;
-					}
-				}
-			}
-			for (i = 0; i < iter ; i++)
-			{
-				if (tts_announcer_switch == 0)
-					goto end;
-				
-				rate = (int)(comets[order[i]].y*100)/(screen->h - igloo_vertical_offset - images[IMG_IGLOO_INTACT]->h);
-				if (rate < 30)
-					rate = 30;
-				else if (rate > 70)
-					rate = 70;
-				
-				
-				
-				mbstowcs(qustion,comets[order[i]].flashcard.formula_string,2000);				
-				temp = wcstok(qustion,L" ",&ptr);
-				qustion_in_words[0] = L'\0';
-				while(temp != NULL)
-				{
-					if (wcscmp(temp,L"+") == 0)
-						wcscat(qustion_in_words,_(L"plus "));
-					else if (wcscmp(temp,L"-") == 0)
-						wcscat(qustion_in_words,_(L"minus "));
-					else if (wcscmp(temp,L"/") == 0)
-						wcscat(qustion_in_words,_(L"divided by "));
-					else if (wcscmp(temp,L"*") == 0)
-						wcscat(qustion_in_words,_(L"Times "));
-					else
-					{
-						wcscat(qustion_in_words,temp);
-						wcscat(qustion_in_words,L" ");
-					}	
-					temp = wcstok(NULL,L" ",&ptr);
-				}
-				
-				
-				
-				
-				T4K_Tts_say(rate,rate,INTERRUPT,"%S",qustion_in_words);
-				SDL_Delay(20);
-				T4K_Tts_wait();
-			}		
-		}	
-	}
-	end:
-	return 0;
-}
-void start_tts_announcer_thread(){
-	extern SDL_Thread *tts_announcer_thread;
-	tts_announcer_thread = SDL_CreateThread(tts_announcer,NULL);
-}
-
-void stop_tts_announcer_thread(){
-	tts_announcer_switch = 0;
-	T4K_Tts_stop();
-}
-
 
 
 /* --- MAIN GAME FUNCTION!!! --- */
@@ -2241,7 +2145,7 @@ void comets_handle_game_over(int game_status)
             dest_message.y = (screen->h - images[IMG_GAMEOVER_WON]->h) / 2;
             dest_message.w = images[IMG_GAMEOVER_WON]->w;
             dest_message.h = images[IMG_GAMEOVER_WON]->h;
-
+            T4K_Tts_say(DEFAULT_VALUE,DEFAULT_VALUE,INTERRUPT,"Game winned");
             do
             {
                 FC_frame_begin();
@@ -3955,3 +3859,104 @@ void print_current_quests(void)
     //}
     fprintf(stderr, "------------------------------------------\n");
 }
+
+
+int tts_announcer(void *unused)
+{
+	int i,j;
+	
+	int order[15],iter;
+	float y_axis;
+	
+	//Qustion remaker
+	wchar_t qustion[2000];	
+	wchar_t *ptr;
+	wchar_t *temp;
+	wchar_t qustion_in_words[2000];
+	
+	int pitch;
+	int rate;
+	tts_announcer_switch = 1;
+	
+	while(1)
+	{
+		if (tts_announcer_switch == 0)
+			goto end;
+		
+		iter = 0;				
+		//Getting all alive comets to
+		for (i = 0; i < MAX_MAX_COMETS; i++){
+			if (comets[i].alive){
+				order[iter] = i;
+				iter++;
+			}
+		}
+		
+		if (iter != 0){
+			//Odering the fishes with respect to y axis
+			for (i = 0; i < iter; i++){
+				for(j = 0; j < iter; j++){
+					if (comets[order[j]].y < comets[order[j+1]].y){
+						y_axis = order[j+1];
+						order[j+1] = order[j];
+						order[j] = y_axis;
+					}
+				}
+			}
+			for (i = 0; i < iter ; i++)
+			{
+				if (tts_announcer_switch == 0)
+					goto end;
+				
+				rate = (int)(comets[order[i]].y*100)/(screen->h - igloo_vertical_offset - images[IMG_IGLOO_INTACT]->h);
+				if (rate < 30)
+					rate = 30;
+				else if (rate > 70)
+					rate = 70;
+				
+				
+				
+				mbstowcs(qustion,comets[order[i]].flashcard.formula_string,2000);				
+				temp = wcstok(qustion,L" ",&ptr);
+				qustion_in_words[0] = L'\0';
+				while(temp != NULL)
+				{
+					if (wcscmp(temp,L"+") == 0)
+						wcscat(qustion_in_words,_(L"plus "));
+					else if (wcscmp(temp,L"-") == 0)
+						wcscat(qustion_in_words,_(L"minus "));
+					else if (wcscmp(temp,L"/") == 0)
+						wcscat(qustion_in_words,_(L"divided by "));
+					else if (wcscmp(temp,L"*") == 0)
+						wcscat(qustion_in_words,_(L"Times "));
+					else
+					{
+						wcscat(qustion_in_words,temp);
+						wcscat(qustion_in_words,L" ");
+					}	
+					temp = wcstok(NULL,L" ",&ptr);
+				}
+				
+				
+				
+				
+				T4K_Tts_say(rate,rate,INTERRUPT,"%S",qustion_in_words);
+				SDL_Delay(20);
+				T4K_Tts_wait();
+			}		
+		}	
+	}
+	end:
+	return 0;
+}
+void start_tts_announcer_thread(){
+	extern SDL_Thread *tts_announcer_thread;
+	tts_announcer_thread = SDL_CreateThread(tts_announcer,NULL);
+}
+
+void stop_tts_announcer_thread(){
+	tts_announcer_switch = 0;
+	T4K_Tts_stop();
+}
+
+
