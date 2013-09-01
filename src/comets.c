@@ -352,7 +352,7 @@ int comets_game(MC_MathGame* mgame)
         {
 			stop_tts_announcer_thread();
 			if(Opts_GetGlobalOp("USE_TTS"))
-				T4K_Tts_say(DEFAULT_VALUE,DEFAULT_VALUE,INTERRUPT,"Game paused. Press escape or p to continue");
+				T4K_Tts_say(DEFAULT_VALUE,DEFAULT_VALUE,INTERRUPT,_("Game paused. Press escape or p to continue"));
             pause_game();
             paused = 0;
             start_tts_announcer_thread();
@@ -945,6 +945,7 @@ void help_add_comet(const char* formula_str, const char* ans_str)
 
 void game_set_message(game_message *msg,const char *txt,int x,int y)
 {
+	T4K_Tts_say(DEFAULT_VALUE,DEFAULT_VALUE,APPEND,"%s",txt);
     if (msg && txt)
     {
         msg->x = x;
@@ -2147,7 +2148,7 @@ void comets_handle_game_over(int game_status)
             dest_message.h = images[IMG_GAMEOVER_WON]->h;
             
             stop_tts_announcer_thread();
-            T4K_Tts_say(DEFAULT_VALUE,DEFAULT_VALUE,INTERRUPT,"Game winned");
+            T4K_Tts_say(DEFAULT_VALUE,DEFAULT_VALUE,INTERRUPT,_("Game winned"));
             do
             {
                 FC_frame_begin();
@@ -2361,7 +2362,7 @@ void comets_handle_game_over(int game_status)
         case GAME_OVER_OTHER:
         {
 			stop_tts_announcer_thread();
-            T4K_Tts_say(DEFAULT_VALUE,DEFAULT_VALUE,INTERRUPT,"Game Over!");
+            T4K_Tts_say(DEFAULT_VALUE,DEFAULT_VALUE,INTERRUPT,_("Game Over!"));
             int looping = 1;
 
             /* set up GAMEOVER message: */
@@ -3935,11 +3936,7 @@ int tts_announcer(void *unused)
 						wcscat(qustion_in_words,L" ");
 					}	
 					temp = wcstok(NULL,L" ",&ptr);
-				}
-				
-				
-				
-				
+				}	
 				T4K_Tts_say(rate,rate,INTERRUPT,"%S",qustion_in_words);
 				SDL_Delay(20);
 				T4K_Tts_wait();
