@@ -2345,17 +2345,13 @@ void comets_handle_game_over(int game_status)
         }
 
         case GAME_OVER_LAN_HALTED:
-        {
-            ShowMessageWrap(DEFAULT_MENU_FONT_SIZE, 
-                    _("Network game terminated by server.\n The server is still running.")); 
-            break;
-        }
-
-
         case GAME_OVER_LAN_DISCONNECT:
         {
             ShowMessageWrap(DEFAULT_MENU_FONT_SIZE, 
-                    _("Network game terminated.\n Connection with server was lost.")); 
+                    _("Network game terminated.\n Connection with server was lost."));
+            stop_tts_announcer_thread();
+            T4K_Tts_say(DEFAULT_VALUE,DEFAULT_VALUE,INTERRUPT,
+					_("Network game terminated.\n Connection with server was lost.")); 
             break;
         }
 
@@ -3929,9 +3925,9 @@ int tts_announcer(void *unused)
 						wcscat(qustion_in_words,_(L"plus "));
 					else if (wcscmp(temp,L"-") == 0)
 						wcscat(qustion_in_words,_(L"minus "));
-					else if (wcscmp(temp,L"/") == 0)
+					else if (wcscmp(temp,L"÷") == 0)
 						wcscat(qustion_in_words,_(L"divided by "));
-					else if (wcscmp(temp,L"*") == 0)
+					else if (wcscmp(temp,L"x") == 0)
 						wcscat(qustion_in_words,_(L"Times "));
 					else
 					{
