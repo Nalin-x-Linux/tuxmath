@@ -3975,37 +3975,41 @@ int tts_announcer(void *unused)
 				if (tts_announcer_switch == 0)
 					goto end;
 				
-				rate = (int)(comets[order[i]].y*100)/(screen->h - igloo_vertical_offset - images[IMG_IGLOO_INTACT]->h);
-				if (rate < 30)
-					rate = 30;
-				else if (rate > 70)
-					rate = 70;
-				
-				
-				
-				mbstowcs(qustion,comets[order[i]].flashcard.formula_string,2000);				
-				temp = wcstok(qustion,L" ",&ptr);
-				qustion_in_words[0] = L'\0';
-				while(temp != NULL)
+				//Announce if comet is alive
+				if (comets[order[i]].alive)
 				{
-					if (wcscmp(temp,L"+") == 0)
-						wcscat(qustion_in_words,_(L"plus "));
-					else if (wcscmp(temp,L"-") == 0)
-						wcscat(qustion_in_words,_(L"minus "));
-					else if (wcscmp(temp,L"÷") == 0)
-						wcscat(qustion_in_words,_(L"divided by "));
-					else if (wcscmp(temp,L"x") == 0)
-						wcscat(qustion_in_words,_(L"Times "));
-					else
+					rate = (int)(comets[order[i]].y*100)/(screen->h - igloo_vertical_offset - images[IMG_IGLOO_INTACT]->h);
+					if (rate < 30)
+						rate = 30;
+					else if (rate > 70)
+						rate = 70;
+				
+				
+				
+					mbstowcs(qustion,comets[order[i]].flashcard.formula_string,2000);				
+					temp = wcstok(qustion,L" ",&ptr);
+					qustion_in_words[0] = L'\0';
+					while(temp != NULL)
 					{
-						wcscat(qustion_in_words,temp);
-						wcscat(qustion_in_words,L" ");
-					}	
-					temp = wcstok(NULL,L" ",&ptr);
-				}	
-				T4K_Tts_say(rate,rate,INTERRUPT,"%S",qustion_in_words);
-				SDL_Delay(20);
-				T4K_Tts_wait();
+						if (wcscmp(temp,L"+") == 0)
+							wcscat(qustion_in_words,_(L"plus "));
+						else if (wcscmp(temp,L"-") == 0)
+							wcscat(qustion_in_words,_(L"minus "));
+						else if (wcscmp(temp,L"÷") == 0)
+							wcscat(qustion_in_words,_(L"divided by "));
+						else if (wcscmp(temp,L"x") == 0)
+							wcscat(qustion_in_words,_(L"Times "));
+						else
+						{
+							wcscat(qustion_in_words,temp);
+							wcscat(qustion_in_words,L" ");
+						}
+						temp = wcstok(NULL,L" ",&ptr);
+					}
+					T4K_Tts_say(rate,rate,INTERRUPT,"%S",qustion_in_words);
+					SDL_Delay(20);
+					T4K_Tts_wait();
+				}
 			}		
 		}	
 	}
