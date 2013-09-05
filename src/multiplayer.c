@@ -90,7 +90,11 @@ void mp_run_multiplayer()
         {
             //TODO maybe gradually increase difficulty
             game_set_start_message(pnames[currentplayer], "Go!", "", "");
-            T4K_Tts_say(DEFAULT_VALUE,DEFAULT_VALUE,INTERRUPT,"%s %s ",pnames[currentplayer],_("Go!"));
+            
+            //Announcing the current pleyer name 
+            if(Opts_GetGlobalOp("USE_TTS"))
+				T4K_Tts_say(DEFAULT_VALUE,DEFAULT_VALUE,INTERRUPT,"%s %s ",pnames[currentplayer],_("Go!"));
+            
             result = comets_game(local_game);
 
             if (result == GAME_OVER_LOST || result == GAME_OVER_ESCAPE)
@@ -129,7 +133,11 @@ void mp_run_multiplayer()
             for (currentplayer = 0; currentplayer < params[PLAYERS]; ++currentplayer)
             {
                 game_set_start_message(pnames[currentplayer], _("Go!"), NULL, NULL);
-                T4K_Tts_say(DEFAULT_VALUE,DEFAULT_VALUE,INTERRUPT,"%s %s ",pnames[currentplayer],_("Go!"));
+                
+                //Announcing the current player name
+                if(Opts_GetGlobalOp("USE_TTS"))
+					T4K_Tts_say(DEFAULT_VALUE,DEFAULT_VALUE,INTERRUPT,"%s %s ",pnames[currentplayer],_("Go!"));
+                
                 result = comets_game(local_game);
                 //pscores[currentplayer] += Opts_LastScore(); //add this player's score
                 if (result == GAME_OVER_WON)
@@ -231,7 +239,8 @@ void showWinners(int* winners, int num)
         snprintf(strchr(text, '\0'), sectionlength, _("Then %s\n"), pnames[winners[i]]);
     }
     
-    T4K_Tts_say(DEFAULT_VALUE,DEFAULT_VALUE,INTERRUPT,_("%s. press space or escape to return to main menu."),text);
+    if(Opts_GetGlobalOp("USE_TTS"))
+		T4K_Tts_say(DEFAULT_VALUE,DEFAULT_VALUE,INTERRUPT,_("%s. press space or escape to return to main menu."),text);
 
     DEBUGMSG(debug_multiplayer, "%s Win text: %s\n", pnames[winners[0]], text);
 
