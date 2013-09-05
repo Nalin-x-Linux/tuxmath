@@ -108,9 +108,8 @@ static int int_to_bool(int i);
 /********************************************************************/
 
 int Opts_Initialize(void)
-{
+{   
     int i;
-
     /* Only allocate game_options if not already done: */
     if(!game_options)
         game_options = (game_option_type*)malloc(sizeof(game_option_type));
@@ -179,6 +178,8 @@ int Opts_Initialize(void)
 
     DEBUGCODE(debug_options)
         print_game_options(stdout, 0);
+        
+
 
     return 1;
 }
@@ -243,6 +244,9 @@ void Opts_SetGlobalOpt(unsigned int index, int val)
             if(!Opts_SoundHWAvailable())
                 val = 0;
         }
+        if (index == USE_TTS)
+			text_to_speech_status = val;
+        
         global_options->iopts[index] = val;
     }
     else
