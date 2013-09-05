@@ -758,7 +758,8 @@ void comets_handle_help(void)
     timer = 0;
     while (comets[0].alive && (timer+=FC_time_elapsed) < 7 && !(quit_help = help_renderframe_exit())); // advance comet
     {
-		T4K_Tts_say(DEFAULT_VALUE,DEFAULT_VALUE,APPEND,"2 + 1 = ?");
+		if(Opts_GetGlobalOp("USE_TTS"))
+			T4K_Tts_say(DEFAULT_VALUE,DEFAULT_VALUE,APPEND,"2 + 1 = ?");
 		if (quit_help)
 		    return;
 	}
@@ -943,7 +944,9 @@ void comets_handle_help(void)
     if (powerup_comet->comet.alive)
         powerup_comet->inc_speed = 0;
     game_set_message(&s3,_("Zap it now!"),left_edge,225);
-    T4K_Tts_say(DEFAULT_VALUE,DEFAULT_VALUE,APPEND,"%s",_("Zap it now!"));
+    
+    if(Opts_GetGlobalOp("USE_TTS"))
+		T4K_Tts_say(DEFAULT_VALUE,DEFAULT_VALUE,APPEND,"%s",_("Zap it now!"));
 
     while (powerup_comet->comet.alive && !(quit_help = help_renderframe_exit()));
 
