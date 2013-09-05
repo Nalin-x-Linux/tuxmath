@@ -399,11 +399,11 @@ void NameEntry(char* pl_name, const char* s1, const char* s2, const char* s3)
 
     }
     if (_(s3) != NULL)
-		T4K_Tts_say(DEFAULT_VALUE,DEFAULT_VALUE,INTERRUPT,"%s %s %s",_(s1),_(s2),_(s3));
+		T4K_Tts_say(DEFAULT_VALUE,DEFAULT_VALUE,APPEND,"%s %s %s",_(s1),_(s2),_(s3));
 	else if(_(s2) != NULL)
-		T4K_Tts_say(DEFAULT_VALUE,DEFAULT_VALUE,INTERRUPT,"%s %s",_(s1),_(s2));
+		T4K_Tts_say(DEFAULT_VALUE,DEFAULT_VALUE,APPEND,"%s %s",_(s1),_(s2));
 	else
-		T4K_Tts_say(DEFAULT_VALUE,DEFAULT_VALUE,INTERRUPT,"%s",_(s1));
+		T4K_Tts_say(DEFAULT_VALUE,DEFAULT_VALUE,APPEND,"%s",_(s1));
 
     /* and update: */
     SDL_UpdateRect(screen, 0, 0, 0, 0);
@@ -538,6 +538,9 @@ void NameEntry(char* pl_name, const char* s1, const char* s2, const char* s3)
 
     DEBUGMSG(debug_highscore, "Leaving NameEntry(), final string is: %s\n",
             pl_name);
+    
+    if (wcslen(wchar_buf) != 0)
+       T4K_Tts_say(DEFAULT_VALUE,DEFAULT_VALUE,INTERRUPT,"%S.",wchar_buf);
 }
 
 
