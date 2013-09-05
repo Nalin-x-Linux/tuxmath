@@ -351,8 +351,7 @@ int comets_game(MC_MathGame* mgame)
         if (paused)
         {
 			stop_tts_announcer_thread();
-			if(Opts_GetGlobalOp("USE_TTS"))
-				T4K_Tts_say(DEFAULT_VALUE,DEFAULT_VALUE,INTERRUPT,_("Game paused. Press escape or p to continue"));
+			T4K_Tts_say(DEFAULT_VALUE,DEFAULT_VALUE,INTERRUPT,_("Game paused. Press escape or p to continue"));
             pause_game();
             paused = 0;
             start_tts_announcer_thread();
@@ -711,8 +710,7 @@ void comets_handle_help(void)
 
     // Write the introductory text
     game_set_message(&s1,_("Welcome to TuxMath!"),-1,50);
-    if(Opts_GetGlobalOp("USE_TTS"))
-		T4K_Tts_say(DEFAULT_VALUE,DEFAULT_VALUE,APPEND,_("Welcome to TuxMath!"));
+	T4K_Tts_say(DEFAULT_VALUE,DEFAULT_VALUE,APPEND,_("Welcome to TuxMath!"));
 
 
 #ifndef NOSOUND
@@ -734,8 +732,7 @@ void comets_handle_help(void)
     game_set_message(&s3,_("penguins' igloos from the"), left_edge, 135);
     game_set_message(&s4,_("falling comets."), left_edge, 170);
     
-    if(Opts_GetGlobalOp("USE_TTS"))
-		T4K_Tts_say(DEFAULT_VALUE,DEFAULT_VALUE,APPEND,"%s %s %s",
+	T4K_Tts_say(DEFAULT_VALUE,DEFAULT_VALUE,APPEND,"%s %s %s",
 		_("Your mission is to save your"),
 		_("penguins' igloos from the"),
 		_("falling comets."));
@@ -749,8 +746,7 @@ void comets_handle_help(void)
     speed = 30;
     help_add_comet("2 + 1 = ?", "3");
     
-    if(Opts_GetGlobalOp("USE_TTS"))
-		T4K_Tts_say(DEFAULT_VALUE,DEFAULT_VALUE,APPEND,"2 + 1 = ?");
+	T4K_Tts_say(DEFAULT_VALUE,DEFAULT_VALUE,APPEND,"2 + 1 = ?");
     
     help_controls.laser_enabled = 1;
     level_start_wait = 0;
@@ -758,8 +754,7 @@ void comets_handle_help(void)
     timer = 0;
     while (comets[0].alive && (timer+=FC_time_elapsed) < 7 && !(quit_help = help_renderframe_exit())); // advance comet
     {
-		if(Opts_GetGlobalOp("USE_TTS"))
-			T4K_Tts_say(DEFAULT_VALUE,DEFAULT_VALUE,APPEND,"2 + 1 = ?");
+		T4K_Tts_say(DEFAULT_VALUE,DEFAULT_VALUE,APPEND,"2 + 1 = ?");
 		if (quit_help)
 		    return;
 	}
@@ -770,8 +765,7 @@ void comets_handle_help(void)
         game_set_message(&s3,_("and hitting 'space' or 'enter'."),left_edge,170);
         game_set_message(&s4,_("Try it now!"),left_edge,225);
         
-        if(Opts_GetGlobalOp("USE_TTS"))
-			T4K_Tts_say(DEFAULT_VALUE,DEFAULT_VALUE,APPEND,"%s %s %s %s 2 + 1 = ",
+		T4K_Tts_say(DEFAULT_VALUE,DEFAULT_VALUE,APPEND,"%s %s %s %s 2 + 1 = ",
 			_("Stop a comet by typing"),_("the answer to the math problem"),
 			_("and hitting 'space' or 'enter'."),_("Try it now!"));
 			
@@ -784,10 +778,8 @@ void comets_handle_help(void)
 		
     }
 
-    game_set_message(&s1,_("Good shot!"),left_edge,100);
-    
-    if(Opts_GetGlobalOp("USE_TTS"))
-		T4K_Tts_say(DEFAULT_VALUE,DEFAULT_VALUE,APPEND,"%s",_("Good shot!"));
+    game_set_message(&s1,_("Good shot!"),left_edge,100);    
+	T4K_Tts_say(DEFAULT_VALUE,DEFAULT_VALUE,APPEND,"%s",_("Good shot!"));
     
     comets_clear_message(&s2);
     comets_clear_message(&s3);
@@ -804,8 +796,7 @@ void comets_handle_help(void)
     game_set_message(&s4,_("Just watch what happens:"),left_edge,225);
     game_set_message(&s5,_("(Press a key to start)"),left_edge,260);
     
-    if(Opts_GetGlobalOp("USE_TTS"))
-		T4K_Tts_say(DEFAULT_VALUE,DEFAULT_VALUE,APPEND,"%s %s %s %s %s",
+	T4K_Tts_say(DEFAULT_VALUE,DEFAULT_VALUE,APPEND,"%s %s %s %s %s",
 		_("If an igloo gets hit by a comet,"),_("it melts. But don't worry: the"),
 		_("penguin is OK!"),_("Just watch what happens:"),_("(Press a key to start)"));
 
@@ -817,17 +808,14 @@ void comets_handle_help(void)
 
     help_add_comet("3 x 3 = ?", "9");
     
-    if(Opts_GetGlobalOp("USE_TTS"))
-		T4K_Tts_say(DEFAULT_VALUE,DEFAULT_VALUE,APPEND,"3 x 3 = ?");
+	T4K_Tts_say(DEFAULT_VALUE,DEFAULT_VALUE,APPEND,"3 x 3 = ?");
     
     comets[0].y = 2*(screen->h)/3;   // start it low down
     while ((comets[0].expl == -1) && !(quit_help = help_renderframe_exit()));  // wait 3 secs
     if (quit_help)
         return;
-    game_set_message(&s4,_("Notice the answer"),left_edge,comets[0].y-100);
-    
-    if(Opts_GetGlobalOp("USE_TTS"))
-		T4K_Tts_say(DEFAULT_VALUE,DEFAULT_VALUE,APPEND,"%s 9",_("Notice the answer"));
+    game_set_message(&s4,_("Notice the answer"),left_edge,comets[0].y-100);    
+	T4K_Tts_say(DEFAULT_VALUE,DEFAULT_VALUE,APPEND,"%s 9",_("Notice the answer"));
     
     help_renderframe_exit();
     SDL_Delay(4000);
@@ -842,8 +830,7 @@ void comets_handle_help(void)
     game_set_message(&s2,_("penguin leaves."),left_edge,135);
     game_set_message(&s3,_("(Press a key when ready)"),left_edge,200);
     
-    if(Opts_GetGlobalOp("USE_TTS"))
-		T4K_Tts_say(DEFAULT_VALUE,DEFAULT_VALUE,APPEND,"%s %s %s",
+	T4K_Tts_say(DEFAULT_VALUE,DEFAULT_VALUE,APPEND,"%s %s %s",
 		_("If it gets hit again, the"),_("penguin leaves."),_("(Press a key when ready)"));
 
     key_pressed = 0;
@@ -854,8 +841,7 @@ void comets_handle_help(void)
 
     help_add_comet("56 ÷ 8 = ?", "7");
 	
-	if(Opts_GetGlobalOp("USE_TTS"))
-		T4K_Tts_say(DEFAULT_VALUE,DEFAULT_VALUE,APPEND,"56 ÷ 8 = ?");
+	T4K_Tts_say(DEFAULT_VALUE,DEFAULT_VALUE,APPEND,"56 ÷ 8 = ?");
     
     comets[0].y = 2*(screen->h)/3;   // start it low down
 
@@ -875,8 +861,7 @@ void comets_handle_help(void)
     game_set_message(&s2,_("by stopping bonus comets."), left_edge,135);
     help_add_comet("2 + 2 = ?", "4");
 	
-	if(Opts_GetGlobalOp("USE_TTS"))
-		T4K_Tts_say(DEFAULT_VALUE,DEFAULT_VALUE,APPEND,"%s %s 2 + 2 = ?",
+	T4K_Tts_say(DEFAULT_VALUE,DEFAULT_VALUE,APPEND,"%s %s 2 + 2 = ?",
 		_("You can fix the igloos"),_("by stopping bonus comets."));
 		
 		
@@ -891,8 +876,7 @@ void comets_handle_help(void)
         speed = 0;
     game_set_message(&s3,_("Zap it now!"),left_edge,225);
     
-    if(Opts_GetGlobalOp("USE_TTS"))
-		T4K_Tts_say(DEFAULT_VALUE,DEFAULT_VALUE,APPEND,"2 + 2 = %s",_("Zap it now!"));
+	T4K_Tts_say(DEFAULT_VALUE,DEFAULT_VALUE,APPEND,"2 + 2 = %s",_("Zap it now!"));
 
     while (comets[0].alive && !(quit_help = help_renderframe_exit()));
 
@@ -900,8 +884,7 @@ void comets_handle_help(void)
         return;
     game_set_message(&s1,_("Great job!"),left_edge,100);
     
-    if(Opts_GetGlobalOp("USE_TTS"))
-		T4K_Tts_say(DEFAULT_VALUE,DEFAULT_VALUE,APPEND,"%s",_("Great job!"));
+	T4K_Tts_say(DEFAULT_VALUE,DEFAULT_VALUE,APPEND,"%s",_("Great job!"));
     
     comets_clear_message(&s2);
     comets_clear_message(&s3);
@@ -924,8 +907,7 @@ void comets_handle_help(void)
     game_set_message(&s1,_("Fast-moving powerup comets"), left_edge,100);
     game_set_message(&s2,_("earn you a secret weapon:"), left_edge,135);
     
-    if(Opts_GetGlobalOp("USE_TTS"))
-		T4K_Tts_say(DEFAULT_VALUE,DEFAULT_VALUE,APPEND,"%s %s",
+	T4K_Tts_say(DEFAULT_VALUE,DEFAULT_VALUE,APPEND,"%s %s",
 		_("Fast-moving powerup comets"),_("earn you a secret weapon:"));
 		
     powerup_add_comet();
@@ -936,17 +918,14 @@ void comets_handle_help(void)
 		if (quit_help)
 			return;
 		
-		if(Opts_GetGlobalOp("USE_TTS"))
-			T4K_Tts_say(DEFAULT_VALUE,DEFAULT_VALUE,APPEND,"%s",powerup_comet->comet.flashcard.formula_string);
+		T4K_Tts_say(DEFAULT_VALUE,DEFAULT_VALUE,APPEND,"%s",powerup_comet->comet.flashcard.formula_string);
 	}
         
         
     if (powerup_comet->comet.alive)
         powerup_comet->inc_speed = 0;
-    game_set_message(&s3,_("Zap it now!"),left_edge,225);
-    
-    if(Opts_GetGlobalOp("USE_TTS"))
-		T4K_Tts_say(DEFAULT_VALUE,DEFAULT_VALUE,APPEND,"%s",_("Zap it now!"));
+    game_set_message(&s3,_("Zap it now!"),left_edge,225);    
+	T4K_Tts_say(DEFAULT_VALUE,DEFAULT_VALUE,APPEND,"%s",_("Zap it now!"));
 
     while (powerup_comet->comet.alive && !(quit_help = help_renderframe_exit()));
 
@@ -958,8 +937,7 @@ void comets_handle_help(void)
     game_set_message(&s3,_("in the upper right corner."),left_edge,170);
     game_set_message(&s4,_("Do it now, and then play!"),left_edge,225);
     
-    if(Opts_GetGlobalOp("USE_TTS"))
-		T4K_Tts_say(DEFAULT_VALUE,DEFAULT_VALUE,APPEND,"%s %s %s %s",
+	T4K_Tts_say(DEFAULT_VALUE,DEFAULT_VALUE,APPEND,"%s %s %s %s",
 		_("Quit at any time by pressing"),_("'Esc' or clicking the 'X'"),
 		_("in the upper right corner."),_("Do it now, and then play!"));
 		
@@ -2232,8 +2210,7 @@ void comets_handle_game_over(int game_status)
             dest_message.h = images[IMG_GAMEOVER_WON]->h;
             
             stop_tts_announcer_thread();
-            if(Opts_GetGlobalOp("USE_TTS"))
-				T4K_Tts_say(DEFAULT_VALUE,DEFAULT_VALUE,INTERRUPT,_("Game winned"));
+			T4K_Tts_say(DEFAULT_VALUE,DEFAULT_VALUE,INTERRUPT,_("Game winned"));
             
             
             do
@@ -2438,11 +2415,9 @@ void comets_handle_game_over(int game_status)
             ShowMessageWrap(DEFAULT_MENU_FONT_SIZE, 
                     _("Network game terminated.\n Connection with server was lost."));
             
-            if(Opts_GetGlobalOp("USE_TTS")){
-				stop_tts_announcer_thread();
-				T4K_Tts_say(DEFAULT_VALUE,DEFAULT_VALUE,INTERRUPT,
-					_("Network game terminated.\n Connection with server was lost."));
-				} 
+			stop_tts_announcer_thread();
+			T4K_Tts_say(DEFAULT_VALUE,DEFAULT_VALUE,INTERRUPT,
+					_("Network game terminated.\n Connection with server was lost.")); 
             break;
         }
 
@@ -2451,10 +2426,9 @@ void comets_handle_game_over(int game_status)
         case GAME_OVER_LOST:
         case GAME_OVER_OTHER:
         {
-			if(Opts_GetGlobalOp("USE_TTS")){
-				stop_tts_announcer_thread();
-				T4K_Tts_say(DEFAULT_VALUE,DEFAULT_VALUE,INTERRUPT,_("Game Over!"));
-			}
+			stop_tts_announcer_thread();
+			T4K_Tts_say(DEFAULT_VALUE,DEFAULT_VALUE,INTERRUPT,_("Game Over!"));
+			
             int looping = 1;
 
             /* set up GAMEOVER message: */
@@ -4040,14 +4014,12 @@ int tts_announcer(void *unused)
 }
 void start_tts_announcer_thread(){
 	extern SDL_Thread *tts_announcer_thread;
-	if(Opts_GetGlobalOp("USE_TTS"))
-		tts_announcer_thread = SDL_CreateThread(tts_announcer,NULL);
+	tts_announcer_thread = SDL_CreateThread(tts_announcer,NULL);
 }
 
 void stop_tts_announcer_thread(){
 	tts_announcer_switch = 0;
-	if(Opts_GetGlobalOp("USE_TTS"))
-		T4K_Tts_stop();
+	T4K_Tts_stop();
 }
 
 

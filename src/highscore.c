@@ -286,11 +286,8 @@ void DisplayHighScores(int level)
                 SDL_FreeSurface(score_surfs[i]);
                 score_surfs[i] = NULL;
             }
-            if(Opts_GetGlobalOp("USE_TTS"))
-            {
-				strcat(tts_temp,". Press space or escape to return to main menu.");
-				T4K_Tts_say(DEFAULT_VALUE,DEFAULT_VALUE,INTERRUPT,"%s",tts_temp);
-			}
+            strcat(tts_temp,". Press space or escape to return to main menu.");
+            T4K_Tts_say(DEFAULT_VALUE,DEFAULT_VALUE,INTERRUPT,"%s",tts_temp);
 
             
             /* Update screen: */
@@ -401,15 +398,12 @@ void NameEntry(char* pl_name, const char* s1, const char* s2, const char* s3)
         }
 
     }
-    if(Opts_GetGlobalOp("USE_TTS"))
-    {
-		if (_(s3) != NULL)
-			T4K_Tts_say(DEFAULT_VALUE,DEFAULT_VALUE,INTERRUPT,"%s %s %s",_(s1),_(s2),_(s3));
-		else if(_(s2) != NULL)
-			T4K_Tts_say(DEFAULT_VALUE,DEFAULT_VALUE,INTERRUPT,"%s %s",_(s1),_(s2));
-		else
-			T4K_Tts_say(DEFAULT_VALUE,DEFAULT_VALUE,INTERRUPT,"%s",_(s1));
-	}
+    if (_(s3) != NULL)
+		T4K_Tts_say(DEFAULT_VALUE,DEFAULT_VALUE,INTERRUPT,"%s %s %s",_(s1),_(s2),_(s3));
+	else if(_(s2) != NULL)
+		T4K_Tts_say(DEFAULT_VALUE,DEFAULT_VALUE,INTERRUPT,"%s %s",_(s1),_(s2));
+	else
+		T4K_Tts_say(DEFAULT_VALUE,DEFAULT_VALUE,INTERRUPT,"%s",_(s1));
 
     /* and update: */
     SDL_UpdateRect(screen, 0, 0, 0, 0);
@@ -469,8 +463,7 @@ void NameEntry(char* pl_name, const char* s1, const char* s2, const char* s3)
                                     {
                                         wchar_buf[(int)wcslen(wchar_buf)] = event.key.keysym.unicode;
                                         redraw = 1;
-                                        if(Opts_GetGlobalOp("USE_TTS"))
-											T4K_Tts_say(DEFAULT_VALUE,DEFAULT_VALUE,INTERRUPT,"%C",event.key.keysym.unicode);
+                                        T4K_Tts_say(DEFAULT_VALUE,DEFAULT_VALUE,INTERRUPT,"%C",event.key.keysym.unicode);
                                     }
                                 }
                         }  /* end  'switch (event.key.keysym.sym)'  */

@@ -400,8 +400,7 @@ int credits(void)
 	strcat(credit_tts_text,"Thaks for reading \0");
 	//fprintf(stderr,"OUTPUT = %s \n LEN = %d",credit_tts_text,MAX_LINES*MAX_LINEWIDTH);
 	
-	if(Opts_GetGlobalOp("USE_TTS"))
-		T4K_Tts_say(DEFAULT_VALUE,DEFAULT_VALUE,INTERRUPT,"%s",credit_tts_text);
+	T4K_Tts_say(DEFAULT_VALUE,DEFAULT_VALUE,INTERRUPT,"%s",credit_tts_text);
 	
 
     /* Clear window: */

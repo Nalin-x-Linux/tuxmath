@@ -92,8 +92,7 @@ void mp_run_multiplayer()
             game_set_start_message(pnames[currentplayer], "Go!", "", "");
             
             //Announcing the current pleyer name 
-            if(Opts_GetGlobalOp("USE_TTS"))
-				T4K_Tts_say(DEFAULT_VALUE,DEFAULT_VALUE,INTERRUPT,"%s %s ",pnames[currentplayer],_("Go!"));
+			T4K_Tts_say(DEFAULT_VALUE,DEFAULT_VALUE,INTERRUPT,"%s %s ",pnames[currentplayer],_("Go!"));
             
             result = comets_game(local_game);
 
@@ -135,8 +134,7 @@ void mp_run_multiplayer()
                 game_set_start_message(pnames[currentplayer], _("Go!"), NULL, NULL);
                 
                 //Announcing the current player name
-                if(Opts_GetGlobalOp("USE_TTS"))
-					T4K_Tts_say(DEFAULT_VALUE,DEFAULT_VALUE,INTERRUPT,"%s %s ",pnames[currentplayer],_("Go!"));
+				T4K_Tts_say(DEFAULT_VALUE,DEFAULT_VALUE,INTERRUPT,"%s %s ",pnames[currentplayer],_("Go!"));
                 
                 result = comets_game(local_game);
                 //pscores[currentplayer] += Opts_LastScore(); //add this player's score
@@ -239,8 +237,7 @@ void showWinners(int* winners, int num)
         snprintf(strchr(text, '\0'), sectionlength, _("Then %s\n"), pnames[winners[i]]);
     }
     
-    if(Opts_GetGlobalOp("USE_TTS"))
-		T4K_Tts_say(DEFAULT_VALUE,DEFAULT_VALUE,INTERRUPT,_("%s. press space or escape to return to main menu."),text);
+	T4K_Tts_say(DEFAULT_VALUE,DEFAULT_VALUE,INTERRUPT,_("%s. press space or escape to return to main menu."),text);
 
     DEBUGMSG(debug_multiplayer, "%s Win text: %s\n", pnames[winners[0]], text);
 
