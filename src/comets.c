@@ -1858,7 +1858,9 @@ int check_extra_life(void)
         }
         if (fewest_hits_left == 2)
             return 0;   /* Don't need an extra life, there's no damage */
+        
         /* Begin the extra life sequence */
+        T4K_Tts_say(DEFAULT_VALUE,DEFAULT_VALUE,APPEND,_("fixing ingloo damage!"));
         extra_life_earned = 0;
         cloud.status = EXTRA_LIFE_ON;
         cloud.y = screen->h/3;
@@ -1881,6 +1883,8 @@ int check_extra_life(void)
         }
         DEBUGCODE(debug_game)
             print_status();
+        
+        T4K_Tts_say(DEFAULT_VALUE,DEFAULT_VALUE,APPEND,_("ingloo damage fixed!"));
         return 1;
     }
     else
