@@ -219,6 +219,7 @@ static int help_renderframe_exit(void);
 static void comets_recalc_positions(int xres, int yres);
 
 //Accessibility functions
+wchar_t* convert_formula_to_sentence(char *formula_string);
 int tts_announcer_switch;
 int tts_announcer(void *unused);
 void stop_tts_announcer_thread();
@@ -1860,7 +1861,7 @@ int check_extra_life(void)
             return 0;   /* Don't need an extra life, there's no damage */
         
         /* Begin the extra life sequence */
-        T4K_Tts_say(DEFAULT_VALUE,DEFAULT_VALUE,APPEND,_("fixing ingloo damage!"));
+        T4K_Tts_say(DEFAULT_VALUE,DEFAULT_VALUE,APPEND,_("fixing ingloo damage!...."));
         extra_life_earned = 0;
         cloud.status = EXTRA_LIFE_ON;
         cloud.y = screen->h/3;
@@ -1883,8 +1884,6 @@ int check_extra_life(void)
         }
         DEBUGCODE(debug_game)
             print_status();
-        
-        T4K_Tts_say(DEFAULT_VALUE,DEFAULT_VALUE,APPEND,_("ingloo damage fixed!"));
         return 1;
     }
     else
@@ -3453,6 +3452,7 @@ void comets_handle_powerup(void)
                 {
                     case SMARTBOMB:
                         smartbomb_alive = 1;
+                        fprintf(stderr,"Smart bomb is ready to use");
                         powerup_comet_running = 0;
                         break;
                     default:  //do nothing
@@ -3932,6 +3932,35 @@ void print_current_quests(void)
 }
 
 
+wchar_t* convert_formula_to_sentence(char *formula_string)
+{
+	wchar_t wc_formula[2000];
+	wchar_t sentence[2000];
+	wchar_t *ptr;
+	wchar_t *temp;
+	mbstowcs(wc_formula,formula_string,2000);
+	temp = wcstok(wc_formula,L" ",&ptr);
+	sentence[0] = L'\0';
+	while(temp != NULL)
+	{
+		if (wcscmp(temp,L"+") == 0)
+			wcscat(sentence,_(L"plus "));
+		else if (wcscmp(temp,L"-") == 0)
+			wcscat(sentence,_(L"minus "));
+		else if (wcscmp(temp,L"÷") == 0)
+			wcscat(sentence,_(L"divided by "));
+		else if (wcscmp(temp,L"x") == 0)
+			wcscat(sentence,_(L"Times "));
+		else
+			{
+				wcscat(sentence,temp);
+				wcscat(sentence,L" ");
+			}
+			temp = wcstok(NULL,L" ",&ptr);
+	}
+	return sentence;
+}
+
 int tts_announcer(void *unused)
 {
 	int i,j;
@@ -3939,11 +3968,6 @@ int tts_announcer(void *unused)
 	int order[15],iter;
 	float y_axis;
 	
-	//Qustion remaker
-	wchar_t qustion[2000];	
-	wchar_t *ptr;
-	wchar_t *temp;
-	wchar_t qustion_in_words[2000];
 	
 	int pitch;
 	int rate;
@@ -3962,8 +3986,12 @@ int tts_announcer(void *unused)
 				iter++;
 			}
 		}
-		
-		if (iter != 0){
+		if(powerup_comet->comet.alive){
+			T4K_Tts_say(DEFAULT_VALUE,70,INTERRUPT,"%S",convert_formula_to_sentence(powerup_comet->comet.flashcard.formula_string));
+			SDL_Delay(20);
+			T4K_Tts_wait();					
+		}
+		else if (iter != 0){
 			//Odering the fishes with respect to y axis
 			for (i = 0; i < iter; i++){
 				for(j = 0; j < iter; j++){
@@ -3988,29 +4016,8 @@ int tts_announcer(void *unused)
 					else if (rate > 70)
 						rate = 70;
 				
-				
-				
-					mbstowcs(qustion,comets[order[i]].flashcard.formula_string,2000);				
-					temp = wcstok(qustion,L" ",&ptr);
-					qustion_in_words[0] = L'\0';
-					while(temp != NULL)
-					{
-						if (wcscmp(temp,L"+") == 0)
-							wcscat(qustion_in_words,_(L"plus "));
-						else if (wcscmp(temp,L"-") == 0)
-							wcscat(qustion_in_words,_(L"minus "));
-						else if (wcscmp(temp,L"÷") == 0)
-							wcscat(qustion_in_words,_(L"divided by "));
-						else if (wcscmp(temp,L"x") == 0)
-							wcscat(qustion_in_words,_(L"Times "));
-						else
-						{
-							wcscat(qustion_in_words,temp);
-							wcscat(qustion_in_words,L" ");
-						}
-						temp = wcstok(NULL,L" ",&ptr);
-					}
-					T4K_Tts_say(rate,rate,INTERRUPT,"%S",qustion_in_words);
+					T4K_Tts_say(rate,rate,INTERRUPT,"%S",
+						convert_formula_to_sentence(comets[order[i]].flashcard.formula_string));
 					SDL_Delay(20);
 					T4K_Tts_wait();
 				}
