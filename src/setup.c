@@ -36,6 +36,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "menu.h"
 #include "titlescreen.h"
 #include "highscore.h"
+#include "mysetenv.h"
+
 
 /* SDL includes: -----------------*/
 #include "SDL.h"
@@ -422,7 +424,8 @@ void handle_command_args(int argc, char* argv[])
                     "                         tuxmath directory, and the user's home.\n"
                     "--playthroughlist      - to ask each question only once, allowing player to\n"
                     "                         win game if all questions successfully answered\n"
-
+                    "--language {language}  - set the language named {language}, if it exists\n"
+                    
                     "--answersfirst   - to ask questions in format: ? + num2 = num3\n"
                     "                   instead of default format: num1 + num2 = ?\n"
                     "--answersmiddle  - to ask questions in format: num1 + ? = num3\n"
@@ -621,6 +624,17 @@ void handle_command_args(int argc, char* argv[])
             MC_SetOpt(local_game, FORMAT_ANSWER_FIRST, 0);
             MC_SetOpt(local_game, FORMAT_ANSWER_MIDDLE, 1);
         }
+
+        else if (strcmp(argv[i], "--language") == 0 ||
+                strcmp(argv[i], "-l") == 0)
+        {
+			++i;
+			my_setenv("LANGUAGE",argv[i]);
+			/* initialize Tts */
+			T4K_Tts_init();
+			T4K_Tts_set_voice(argv[i]);
+        }
+
         else if (strcmp(argv[i], "--speed") == 0 ||
                 strcmp(argv[i], "-s") == 0)
         {
