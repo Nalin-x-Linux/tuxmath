@@ -1861,7 +1861,7 @@ int check_extra_life(void)
             return 0;   /* Don't need an extra life, there's no damage */
         
         /* Begin the extra life sequence */
-        T4K_Tts_say(DEFAULT_VALUE,DEFAULT_VALUE,APPEND,_("fixing ingloo damage!...."));
+        T4K_Tts_say(DEFAULT_VALUE,DEFAULT_VALUE,APPEND,_("fixing ingloo damage! ...."));
         extra_life_earned = 0;
         cloud.status = EXTRA_LIFE_ON;
         cloud.y = screen->h/3;
@@ -3452,7 +3452,6 @@ void comets_handle_powerup(void)
                 {
                     case SMARTBOMB:
                         smartbomb_alive = 1;
-                        fprintf(stderr,"Smart bomb is ready to use");
                         powerup_comet_running = 0;
                         break;
                     default:  //do nothing
