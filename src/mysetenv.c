@@ -65,7 +65,7 @@ int my_setenv (const char * name, const char * value)
 #else
    /* Uh oh, neither putenv() nor setenv() ... */
    fprintf(stderr, "my_setenv() - neither HAVE_PUTENV nor HAVE_SETENV defined\n");
-   return setenv(name,value,1);
+   setenv(name,value,1);
    return -1;
 #endif
 #endif
