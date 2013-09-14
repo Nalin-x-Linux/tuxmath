@@ -4009,7 +4009,8 @@ int tts_announcer(void *unused)
 				}
 				fprintf(stderr,"- <<< Sorting ended /n");
 				
-				
+				/* Announces only last three comets 
+				 * to avoid confusion for a listener*/
 				for (i = 0; i < 3 ; i++)
 				{
 					if (tts_announcer_switch == 0)
