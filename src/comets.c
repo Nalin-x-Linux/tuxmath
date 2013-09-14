@@ -3977,50 +3977,60 @@ int tts_announcer(void *unused)
 		if (tts_announcer_switch == 0)
 			goto end;
 		
-		iter = 0;				
-		//Getting all alive comets to
-		for (i = 0; i < MAX_MAX_COMETS; i++){
-			if (comets[i].alive){
-				order[iter] = i;
-				iter++;
-			}
-		}
 		if(powerup_comet->comet.alive){
 			T4K_Tts_say(DEFAULT_VALUE,70,INTERRUPT,"%S",convert_formula_to_sentence(powerup_comet->comet.flashcard.formula_string));
 			SDL_Delay(20);
 			T4K_Tts_wait();					
 		}
-		else if (iter != 0){
-			//Odering the fishes with respect to y axis
-			for (i = 0; i < iter; i++){
-				for(j = 0; j < iter; j++){
-					if (comets[order[j]].y < comets[order[j+1]].y){
-						y_axis = order[j+1];
-						order[j+1] = order[j];
-						order[j] = y_axis;
-					}
+		else{
+			iter = 0;				
+			//Getting all alive comets to
+			for (i = 0; i < MAX_MAX_COMETS; i++){
+				if (comets[i].alive){
+					order[iter] = i;
+					iter++;
 				}
 			}
-			for (i = 0; i < iter ; i++)
+			
+			/*Odering the fishes with respect to y axis
+			 * we only sort and announce the last three
+			 * comets other wise it causes segfault */
+			if (iter != 0)
 			{
-				if (tts_announcer_switch == 0)
-					goto end;
-				
-				//Announce if comet is alive
-				if (comets[order[i]].alive)
-				{
-					rate = (int)(comets[order[i]].y*100)/(screen->h - igloo_vertical_offset - images[IMG_IGLOO_INTACT]->h);
-					if (rate < 30)
-						rate = 30;
-					else if (rate > 70)
-						rate = 70;
-				
-					T4K_Tts_say(rate,rate,INTERRUPT,"%S",
-						convert_formula_to_sentence(comets[order[i]].flashcard.formula_string));
-					SDL_Delay(20);
-					T4K_Tts_wait();
+				fprintf(stderr,"\nSorting started >>> ");
+				for (i = 0; i < 3; i++){
+					for(j = 0; j < 3; j++){
+						if (comets[order[j]].y < comets[order[j+1]].y){
+							y_axis = order[j+1];
+							order[j+1] = order[j];
+							order[j] = y_axis;
+						}
+					}
 				}
-			}		
+				fprintf(stderr,"- <<< Sorting ended /n");
+				
+				
+				for (i = 0; i < 3 ; i++)
+				{
+					if (tts_announcer_switch == 0)
+						goto end;
+				
+					//Announce if comet is alive
+					if (comets[order[i]].alive)
+					{
+						rate = (int)(comets[order[i]].y*100)/(screen->h - igloo_vertical_offset - images[IMG_IGLOO_INTACT]->h);
+						if (rate < 30)
+							rate = 30;
+						else if (rate > 70)
+							rate = 70;
+				
+						T4K_Tts_say(rate,rate,INTERRUPT,"%S",
+							convert_formula_to_sentence(comets[order[i]].flashcard.formula_string));
+						SDL_Delay(20);
+						T4K_Tts_wait();
+					}
+				}		
+			}
 		}	
 	}
 	end:
