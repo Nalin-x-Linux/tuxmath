@@ -3100,22 +3100,24 @@ void comets_key_event(SDLKey key, SDLMod mod)
             smartbomb_alive = 0;
         }
     }
-    else if(key == SDLK_LCTRL)
-    {
-		stop_tts_announcer_thread();
-		T4K_Tts_wait();	
-		T4K_Tts_say(DEFAULT_VALUE,DEFAULT_VALUE,INTERRUPT,"Score %d!",score);
-		start_tts_announcer_thread();
+    
+    /* Score */
+    else if(key == SDLK_F1)
+    {	
+		tts_announcer_switch = 2;
 	}
 
-    else if(key == SDLK_RCTRL)
+	/* iglu alive */
+    else if(key == SDLK_F2)
     {
-		stop_tts_announcer_thread();
-		T4K_Tts_wait();	
-		T4K_Tts_say(DEFAULT_VALUE,DEFAULT_VALUE,INTERRUPT,"%d iglu alive!",num_cities_alive);
-		start_tts_announcer_thread();
+		tts_announcer_switch = 3;
 	}	
-	
+
+	/* Wave number */
+    else if(key == SDLK_F3)
+    {
+		tts_announcer_switch = 4;
+	}	
 	
 }
 
@@ -3995,8 +3997,34 @@ int tts_announcer(void *unused)
 	while(1)
 	{
 		if (tts_announcer_switch == 0)
+		{
 			goto end;
+		}
+		else if(tts_announcer_switch == 2)
+		{
+			T4K_Tts_say(DEFAULT_VALUE,DEFAULT_VALUE,INTERRUPT,"Score %d!",score);
+			SDL_Delay(20);
+			T4K_Tts_wait();
+			tts_announcer_switch = 1;
+		}
+		else if(tts_announcer_switch == 3)
+		{
+			T4K_Tts_say(DEFAULT_VALUE,DEFAULT_VALUE,INTERRUPT,"%d iglu alive!",num_cities_alive);
+			SDL_Delay(20);
+			T4K_Tts_wait();
+			tts_announcer_switch = 1;
+		}		
+		else if(tts_announcer_switch == 4)
+		{
+			T4K_Tts_say(DEFAULT_VALUE,DEFAULT_VALUE,INTERRUPT,"on wave %d!",wave);
+			SDL_Delay(20);
+			T4K_Tts_wait();
+			tts_announcer_switch = 1;
+		}	
 		
+		
+		
+		/* Continue the process of announcing formula */
 		if(powerup_comet->comet.alive){
 			T4K_Tts_say(DEFAULT_VALUE,70,INTERRUPT,"%S",convert_formula_to_sentence(powerup_comet->comet.flashcard.formula_string));
 			SDL_Delay(20);
