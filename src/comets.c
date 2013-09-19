@@ -2213,7 +2213,7 @@ void comets_handle_game_over(int game_status)
             dest_message.h = images[IMG_GAMEOVER_WON]->h;
             
             stop_tts_announcer_thread();
-			T4K_Tts_say(DEFAULT_VALUE,DEFAULT_VALUE,INTERRUPT,_("Mission Accomplished YOU WIN!"));
+			T4K_Tts_say(DEFAULT_VALUE,DEFAULT_VALUE,INTERRUPT,_("Mission Accomplished! You won!"));
             
             
             do
@@ -4045,7 +4045,6 @@ int tts_announcer(void *unused)
 			 * comets other wise it causes segfault */
 			if (iter != 0)
 			{
-				fprintf(stderr,"\nSorting started >>> ");
 				for (i = 0; i < 3; i++){
 					for(j = 0; j < 3; j++){
 						if (comets[order[j]].y < comets[order[j+1]].y){
@@ -4055,7 +4054,6 @@ int tts_announcer(void *unused)
 						}
 					}
 				}
-				fprintf(stderr,"- <<< Sorting ended /n");
 				
 				/* Announces only last three comets 
 				 * to avoid confusion for a listener*/
