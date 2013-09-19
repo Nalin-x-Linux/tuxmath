@@ -3100,6 +3100,23 @@ void comets_key_event(SDLKey key, SDLMod mod)
             smartbomb_alive = 0;
         }
     }
+    else if(key == SDLK_LCTRL)
+    {
+		stop_tts_announcer_thread();
+		T4K_Tts_wait();	
+		T4K_Tts_say(DEFAULT_VALUE,DEFAULT_VALUE,INTERRUPT,"Score %d!",score);
+		start_tts_announcer_thread();
+	}
+
+    else if(key == SDLK_RCTRL)
+    {
+		stop_tts_announcer_thread();
+		T4K_Tts_wait();	
+		T4K_Tts_say(DEFAULT_VALUE,DEFAULT_VALUE,INTERRUPT,"%d iglu alive!",num_cities_alive);
+		start_tts_announcer_thread();
+	}	
+	
+	
 }
 
 /* Increment score: */
@@ -3971,6 +3988,9 @@ int tts_announcer(void *unused)
 	int pitch;
 	int rate;
 	tts_announcer_switch = 1;
+	
+	SDL_Delay(20);
+	T4K_Tts_wait();	
 	
 	while(1)
 	{
