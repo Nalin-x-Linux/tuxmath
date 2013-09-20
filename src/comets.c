@@ -348,6 +348,8 @@ int comets_game(MC_MathGame* mgame)
         comets_draw();
         // 4. Figure out if we should leave loop:
         comets_status = check_exit_conditions();
+        if (comets_status != GAME_IN_PROGRESS)
+			stop_tts_announcer_thread();
 
         /* If we're in "PAUSE" mode, pause! */
         if (paused)
@@ -976,6 +978,9 @@ int help_renderframe_exit(void)
     comets_handle_extra_life();
     comets_draw();
     comets_status = check_exit_conditions();
+    
+    if (comets_status != GAME_IN_PROGRESS)
+		stop_tts_announcer_thread();
 
     // Delay to keep frame rate constant. Do this in a way
     // that won't cause a freeze if the timer wraps around.
@@ -2213,7 +2218,7 @@ void comets_handle_game_over(int game_status)
             dest_message.w = images[IMG_GAMEOVER_WON]->w;
             dest_message.h = images[IMG_GAMEOVER_WON]->h;
             
-            stop_tts_announcer_thread();
+            //stop_tts_announcer_thread();
 			T4K_Tts_say(DEFAULT_VALUE,DEFAULT_VALUE,INTERRUPT,_("Mission Accomplished! You won!"));
             
             
@@ -2419,7 +2424,7 @@ void comets_handle_game_over(int game_status)
             ShowMessageWrap(DEFAULT_MENU_FONT_SIZE, 
                     _("Network game terminated.\n Connection with server was lost."));
             
-			stop_tts_announcer_thread();
+			//stop_tts_announcer_thread();
 			T4K_Tts_say(DEFAULT_VALUE,DEFAULT_VALUE,INTERRUPT,
 					_("Network game terminated.\n Connection with server was lost.")); 
             break;
@@ -2430,7 +2435,7 @@ void comets_handle_game_over(int game_status)
         case GAME_OVER_LOST:
         case GAME_OVER_OTHER:
         {
-			stop_tts_announcer_thread();
+			//stop_tts_announcer_thread();
 			T4K_Tts_say(DEFAULT_VALUE,DEFAULT_VALUE,INTERRUPT,_("Game Over!"));
 			
             int looping = 1;
@@ -2979,7 +2984,7 @@ void comets_key_event(SDLKey key, SDLMod mod)
     if (key == SDLK_ESCAPE)
     {
         /* Escape key - quit! */
-        stop_tts_announcer_thread();
+        //stop_tts_announcer_thread();
         user_quit_received = GAME_OVER_ESCAPE;
     }
     DEBUGCODE(debug_game)
