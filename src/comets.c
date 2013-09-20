@@ -225,6 +225,7 @@ int tts_announcer(void *unused);
 void stop_tts_announcer_thread();
 void start_tts_announcer_thread();
 
+int volume;
 int powerup_initialize(void);
 PowerUp_Type powerup_gettype(void);
 int powerup_add_comet(void);
@@ -3118,6 +3119,29 @@ void comets_key_event(SDLKey key, SDLMod mod)
     {
 		tts_announcer_switch = 4;
 	}	
+
+    else if(key == SDLK_PAGEUP)
+    {
+		volume = Mix_Volume(-1,-1);
+		Mix_Volume(-1,volume + 10);
+	}	
+
+    else if(key == SDLK_PAGEDOWN)
+    {
+		volume = Mix_Volume(-1,-1);
+		Mix_Volume(-1,volume - 10);	}	
+
+    else if(key == SDLK_HOME)
+    {
+		volume = Mix_VolumeMusic(-1);
+		Mix_VolumeMusic(volume + 10);	}	
+
+    else if(key == SDLK_END)
+    {
+		volume = Mix_VolumeMusic(-1);
+		Mix_VolumeMusic(volume - 10);
+	}	
+
 	
 }
 
