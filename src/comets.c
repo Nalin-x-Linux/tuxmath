@@ -3500,6 +3500,7 @@ void comets_handle_powerup(void)
                 {
                     case SMARTBOMB:
                         smartbomb_alive = 1;
+                        tts_announcer_switch = 5;
                         powerup_comet_running = 0;
                         break;
                     default:  //do nothing
@@ -4050,7 +4051,13 @@ int tts_announcer(void *unused)
 			T4K_Tts_wait();
 			tts_announcer_switch = 1;
 		}	
-		
+		else if(tts_announcer_switch == 5)
+		{
+			T4K_Tts_say(DEFAULT_VALUE,DEFAULT_VALUE,INTERRUPT,"Press 'x' key to use smart bomb!");
+			SDL_Delay(20);
+			T4K_Tts_wait();
+			tts_announcer_switch = 1;
+		}			
 		
 		
 		/* Continue the process of announcing formula */
